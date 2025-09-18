@@ -10,7 +10,7 @@ function Tabs({
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
-      className={cn("flex flex-col gap-2", className)}
+      className={cn("flex flex-col", className)}
       {...props}
     />
   )
@@ -37,7 +37,7 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex items-center justify-center whitespace-nowrap px-2 py-1.5 text-[14px] leading-5",
+        "relative inline-flex items-center justify-center whitespace-nowrap px-4 pt-1 pb-2.5 text-[14px] leading-5",
         "text-tabs-inactive font-normal",
         "data-[state=active]:text-tabs-active data-[state=active]:font-medium",
         "after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0 after:z-10",

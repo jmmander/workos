@@ -53,6 +53,7 @@
   --gray-a5: #0000301B;
   --color-white: rgb(255 255 255);
   --color-black: rgb(0 0 0);
+  --color-button-border: rgba(0, 17, 238, 0.06);
 }
 
 @layer base {
@@ -99,6 +100,10 @@
   
   .shadow-input-inset {
     box-shadow: inset 0px 1.5px 2px 0px #05055806, inset 0px 1.5px 2px 0px #00000006;
+  }
+  
+  .border-default-button {
+    border-color: var(--color-button-border);
   }
 }
 

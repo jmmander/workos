@@ -5,11 +5,11 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none border focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none border aria-invalid:ring-destructive/20 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground border-transparent",
+        default: "bg-primary text-primary-foreground border-default-button",
         destructive:
           "text-destructive-soft-foreground bg-destructive-soft border-destructive-soft-border",
         outline:
@@ -20,8 +20,8 @@ const buttonVariants = cva(
       },
       size: {
         default: "px-3 py-2 rounded-[4px]",
-        sm: "px-2 py-1 rounded-[3px]",
-        icon: "size-6 rounded-full p-0 text-[#0007139F]",
+        sm: "w-[110px] h-8 px-3 py-2 rounded font-medium text-sm leading-5 text-center",
+        icon: "size-6 rounded-full p-0 text-icon-button border-0",
       },
     },
     defaultVariants: {
