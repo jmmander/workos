@@ -1,1 +1,175 @@
 @import "tailwindcss";
+
+
+@theme inline {
+  /* Fonts */
+  --font-sans: "Untitled Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* Base */
+  --color-background: rgb(255 255 255);
+  --color-foreground: rgb(12 12 25);
+  --color-border: rgb(228 230 235);
+  --color-input: rgb(228 230 235);
+  --color-ring: rgb(59 130 246);
+
+  /* Primary */
+  --color-primary: rgb(101 101 236);
+  --color-primary-foreground: rgb(248 250 252);
+
+  /* Secondary */
+  --color-secondary: rgb(241 245 249);
+  --color-secondary-foreground: rgb(43 51 59);
+  --color-secondary-border: rgb(211 212 219);
+  --color-secondary-disabled: rgb(0 0 59 / 0.05);
+  --color-secondary-disabled-text: rgb(0 8 47 / 0.28);
+
+  /* Muted */
+  --color-muted: rgb(241 245 249);
+  --color-muted-foreground: rgb(100 116 139);
+
+  /* Accent */
+  --color-accent: rgb(241 245 249);
+  --color-accent-foreground: rgb(15 23 42);
+
+  /* Popover */
+  --color-popover: rgb(255 255 255);
+  --color-popover-foreground: rgb(12 12 25);
+
+  /* Destructive */
+  --color-destructive: rgb(239 68 68);
+  --color-destructive-foreground: rgb(248 250 252);
+  --color-destructive-soft: rgb(255 246 246 / 0.8);
+  --color-destructive-soft-foreground: rgb(193 0 48 / 0.86);
+  --color-destructive-soft-border: rgb(201 0 40 / 0.31);
+
+  /* Tabs */
+  --color-tabs-border: rgb(1 1 46 / 0.13);
+  --color-tabs-inactive: rgb(0 7 19 / 0.62);
+  --color-tabs-active: rgb(15 23 42);
+
+  /* Misc */
+  --color-ghost-hover: rgb(0 0 59 / 0.05);
+  --color-icon-button: rgb(0 7 19 / 0.62);
+  --color-placeholder: rgb(0 4 29 / 0.46);
+  --gray-a5: #0000301B;
+  --color-white: rgb(255 255 255);
+  --color-black: rgb(0 0 0);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-placeholder {
+    color: var(--color-placeholder);
+  }
+  
+  .text-icon-button {
+    color: var(--color-icon-button);
+  }
+  
+  .border-gray-a5 {
+    border-color: var(--gray-a5);
+  }
+  
+  .text-white {
+    color: var(--color-white);
+  }
+  
+  .text-black {
+    color: var(--color-black);
+  }
+  
+  .bg-white {
+    background-color: var(--color-white);
+  }
+  
+  .bg-black {
+    background-color: var(--color-black);
+  }
+  
+  .shadow-input-inset {
+    box-shadow: inset 0px 1.5px 2px 0px #05055806, inset 0px 1.5px 2px 0px #00000006;
+  }
+}
+
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-light-italic.woff2") format("woff2");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-regular-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-medium-italic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-bold-italic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/untitled-sans/test-untitled-sans-black-italic.woff2") format("woff2");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
