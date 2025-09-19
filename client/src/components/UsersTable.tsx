@@ -1,10 +1,9 @@
 import { useCallback, useState } from "react"
 import { MoreHorizontalIcon } from "lucide-react"
-import { SearchIcon } from "./SearchIcon"
 import { PlusIcon } from "./PlusIcon"
 import { ErrorState } from "./ErrorState"
 import { LoadingState } from "./LoadingState"
-import { Input } from "@/components/ui/input"
+import { SearchBar } from "./SearchBar"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -121,18 +120,13 @@ export function UsersTable({
   return (
     <>
       <div className="mb-6 flex items-center justify-between gap-2">
-        <div className="relative w-full">
-          <SearchIcon className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4" />
-          <Input
-            placeholder="Search by name..."
-            className="pl-7 pr-1"
-            value={query}
-            onChange={(e) => {
-              onPageChange(1)
-              onQueryChange(e.target.value)
-            }}
-          />
-        </div>
+        <SearchBar
+          query={query}
+          placeholder="Search by name..."
+          loading={loading}
+          onQueryChange={onQueryChange}
+          onPageChange={onPageChange}
+        />
         <Button size="default" className="w-[110px] h-8" disabled={loading}>
           <PlusIcon/> Add user
         </Button>
