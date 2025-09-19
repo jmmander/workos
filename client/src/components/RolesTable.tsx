@@ -32,7 +32,6 @@ interface RolesTableProps {
   page: number
   onQueryChange: (query: string) => void
   onPageChange: (page: number) => void
-  onRoleUpdate?: () => void
 }
 
 export function RolesTable({
@@ -43,7 +42,6 @@ export function RolesTable({
   page,
   onQueryChange,
   onPageChange,
-  onRoleUpdate,
 }: RolesTableProps) {
   const rows = roles.data
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -167,7 +165,6 @@ export function RolesTable({
         role={roleToEdit}
         open={editModalOpen}
         onOpenChange={handleCloseEdit}
-        onRoleUpdate={onRoleUpdate}
       />
     </>
   )

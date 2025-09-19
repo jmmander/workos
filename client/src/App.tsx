@@ -1,138 +1,49 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UsersTable } from "@/components/UsersTable"
 import { RolesTable } from "@/components/RolesTable"
-import { useDebounced } from "@/hooks/useDebounced"
-import type { User, Role, PagedData } from "@/types"
-
-const API_URL = "http://localhost:3002"
+import { useUrlState } from "@/hooks/useUrlState"
+import { useUsersQuery } from "@/hooks/useUsersQuery"
+import { useRolesQuery } from "@/hooks/useRolesQuery"
+import { useRolesMapQuery } from "@/hooks/useRolesMapQuery"
 
 function App() {
-  const [page, setPage] = useState(1)
-  const [query, setQuery] = useState("")
-  const debouncedQuery = useDebounced(query, 300)
+  const {
+    activeTab,
+    page,
+    query,
+    rolesPage,
+    rolesQuery,
+    handleTabChange,
+    handlePageChange,
+    handleQueryChange,
+    handleRolesPageChange,
+    handleRolesQueryChange
+  } = useUrlState()
 
-  const [users, setUsers] = useState<PagedData<User>>({ data: [], next: null, prev: null, pages: 0 })
-  const [rolesMap, setRolesMap] = useState<Record<string, Role>>({})
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { users, loading: usersLoading, error: usersError, deleteUser } = useUsersQuery(page, query)
+  const { roles, loading: rolesLoading, error: rolesError } = useRolesQuery(rolesPage, rolesQuery)
+  const rolesMap = useRolesMapQuery()
 
-  // Roles tab state
-  const [rolesPage, setRolesPage] = useState(1)
-  const [rolesQuery, setRolesQuery] = useState("")
-  const debouncedRolesQuery = useDebounced(rolesQuery, 300)
-  const [roles, setRoles] = useState<PagedData<Role>>({ data: [], next: null, prev: null, pages: 0 })
-  const [rolesLoading, setRolesLoading] = useState(false)
-  const [rolesError, setRolesError] = useState<string | null>(null)
-  const [rolesRefreshTrigger, setRolesRefreshTrigger] = useState(0)
-
+  // Handle empty page navigation for users
   useEffect(() => {
-    let cancelled = false
-    async function fetchUsers() {
-      setLoading(true)
-      setError(null)
-      try {
-        const url = new URL(`${API_URL}/users`)
-        if (debouncedQuery) url.searchParams.set("search", debouncedQuery)
-        url.searchParams.set("page", String(page))
-        const res = await fetch(url)
-        if (!res.ok) throw new Error(`Users ${res.status}`)
-        const json: PagedData<User> = await res.json()
-        if (!cancelled) setUsers(json)
-      } catch (e: any) {
-        if (!cancelled) setError(e.message || "Error")
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
+    if (!usersLoading && users.data.length === 0 && page > 1) {
+      handlePageChange(page - 1)
     }
-    fetchUsers()
-    return () => {
-      cancelled = true
-    }
-  }, [page, debouncedQuery])
+  }, [users.data.length, page, usersLoading, handlePageChange])
 
-  useEffect(() => {
-    let cancelled = false
-    async function fetchRoles() {
-      setRolesLoading(true)
-      setRolesError(null)
-      try {
-        const url = new URL(`${API_URL}/roles`)
-        if (debouncedRolesQuery) url.searchParams.set("search", debouncedRolesQuery)
-        url.searchParams.set("page", String(rolesPage))
-        const res = await fetch(url)
-        if (!res.ok) throw new Error(`Roles ${res.status}`)
-        const json: PagedData<Role> = await res.json()
-        if (!cancelled) setRoles(json)
-      } catch (e: any) {
-        if (!cancelled) setRolesError(e.message || "Error")
-      } finally {
-        if (!cancelled) setRolesLoading(false)
-      }
-    }
-    fetchRoles()
-    return () => {
-      cancelled = true
-    }
-  }, [rolesPage, debouncedRolesQuery, rolesRefreshTrigger])
-
-  const refreshRoles = useCallback(() => {
-    setRolesRefreshTrigger(prev => prev + 1)
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-    async function fetchAllRoles() {
-      try {
-        const map: Record<string, Role> = {}
-        let p: number | null = 1
-        while (p) {
-          const url = new URL(`${API_URL}/roles`)
-          url.searchParams.set("page", String(p))
-          const res = await fetch(url)
-          if (!res.ok) throw new Error(`Roles ${res.status}`)
-          const json: PagedData<Role> = await res.json()
-          json.data.forEach((r) => (map[r.id] = r))
-          p = json.next
-        }
-        if (!cancelled) setRolesMap(map)
-      } catch (_) {
-        // non-fatal for UI
-      }
-    }
-    fetchAllRoles()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  const deleteUser = async (userId: string) => {
+  const handleDeleteUser = useCallback(async (userId: string) => {
     try {
-      const res = await fetch(`${API_URL}/users/${userId}`, {
-        method: 'DELETE'
-      })
-      if (!res.ok) throw new Error(`Delete failed: ${res.status}`)
-      
-      // Remove user from local state
-      const updatedUsers = {
-        ...users,
-        data: users.data.filter(user => user.id !== userId)
-      }
-      
-      // If we deleted the last item on this page and we're not on page 1, go back one page
-      if (updatedUsers.data.length === 0 && page > 1) {
-        setPage(page - 1)
-      } else {
-        setUsers(updatedUsers)
-      }
+      await deleteUser(userId)
     } catch (e: any) {
-      setError(e.message || "Failed to delete user")
+      // Error is handled by React Query automatically
+      console.error('Failed to delete user:', e)
     }
-  }
+  }, [deleteUser])
 
   return (
     <div className="mx-auto w-[850px] py-6">
-      <Tabs defaultValue="users">
+      <Tabs value={activeTab} onValueChange={handleTabChange}>
         <TabsList className="mb-6">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="roles">Roles</TabsTrigger>
@@ -142,13 +53,13 @@ function App() {
           <UsersTable 
             users={users}
             rolesMap={rolesMap}
-            loading={loading}
-            error={error}
+            loading={usersLoading}
+            error={usersError}
             query={query}
             page={page}
-            onQueryChange={setQuery}
-            onPageChange={setPage}
-            onDeleteUser={deleteUser}
+            onQueryChange={handleQueryChange}
+            onPageChange={handlePageChange}
+            onDeleteUser={handleDeleteUser}
           />
         </TabsContent>
 
@@ -159,9 +70,8 @@ function App() {
             error={rolesError}
             query={rolesQuery}
             page={rolesPage}
-            onQueryChange={setRolesQuery}
-            onPageChange={setRolesPage}
-            onRoleUpdate={refreshRoles}
+            onQueryChange={handleRolesQueryChange}
+            onPageChange={handleRolesPageChange}
           />
         </TabsContent>
       </Tabs>
