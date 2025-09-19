@@ -31,9 +31,9 @@ export function useRoleMutations() {
   const updateRoleMutation = useMutation({
     mutationFn: ({ roleId, data }: { roleId: string; data: UpdateRoleData }) => 
       updateRole(roleId, data),
-    onSuccess: () => {
-      // Invalidate both paginated roles and the roles map
-      queryClient.invalidateQueries({ queryKey: ['roles'] })
+    onSuccess: async () => {
+      // Invalidate both paginated roles and the roles map, wait for completion
+      await queryClient.invalidateQueries({ queryKey: ['roles'] })
     },
   })
 

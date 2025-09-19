@@ -61,6 +61,7 @@ function PaginationLink({
           variant: "ghost",
           size: "icon",
         }),
+        "focus-ring",
         disabled && "bg-secondary-disabled text-secondary-disabled-text border-transparent pointer-events-none",
         className
       )}
@@ -84,6 +85,7 @@ function PaginationPrevious({
           variant: "ghost",
           size: "icon",
         }),
+        "focus-ring",
         disabled && "text-secondary-disabled-text pointer-events-none",
         className
       )}
@@ -109,6 +111,7 @@ function PaginationNext({
           variant: "ghost",
           size: "icon",
         }),
+        "focus-ring",
         disabled && "text-secondary-disabled-text pointer-events-none",
         className
       )}

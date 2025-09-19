@@ -81,7 +81,7 @@ export function UsersTable({
       <div className={`rounded-lg border-table-inner ${(loading || error) ? 'h-[528px]' : ''}`}>
         <Table>
           <TableHeader>
-            <TableRow className="bg-table-header">
+            <TableRow className="bg-table-header-bg">
               <TableHead className="w-[301px]">User</TableHead>
               <TableHead className="w-[277px]">Role</TableHead>
               <TableHead className="w-[236px]">Joined</TableHead>

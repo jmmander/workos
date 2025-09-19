@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import "tw-animate-css";
 
 @theme inline {
   /* Fonts */
@@ -8,8 +8,6 @@
   --color-background: rgb(255 255 255);
   --color-foreground: rgb(12 12 25);
   --color-border: rgb(228 230 235);
-  --color-input: rgb(228 230 235);
-  --color-ring: rgb(59 130 246);
 
   /* Primary */
   --color-primary: rgb(101 101 236);
@@ -37,11 +35,9 @@
   --color-popover-foreground: rgb(12 12 25);
 
   /* Destructive */
-  --color-destructive: rgb(239 68 68);
-  --color-destructive-foreground: rgb(248 250 252);
-  --color-destructive-soft: rgb(255 246 246 / 0.8);
-  --color-destructive-soft-foreground: rgb(193 0 48 / 0.86);
-  --color-destructive-soft-border: rgb(201 0 40 / 0.31);
+  --color-destructive: rgb(255 246 246 / 0.8);
+  --color-destructive-foreground: rgb(193 0 48 / 0.86);
+  --color-destructive-border: rgb(201 0 40 / 0.31);
 
   /* Tabs */
   --color-tabs-border: rgb(1 1 46 / 0.13);
@@ -57,6 +53,7 @@
   --color-black: rgb(0 0 0);
   --color-button-border: rgba(0, 17, 238, 0.06);
   --gray-a3: rgba(0, 0, 59, 0.05);
+  --gray-a4: rgba(0, 0, 59, 0.1);
   --gray-12: rgba(43, 51, 59, 1);
   
   /* Table */
@@ -81,6 +78,25 @@
 }
 
 @layer utilities {
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+  }
+
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .bg-primary-hover {
+    background-color: var(--color-primary-hover);
+  }
+  .bg-primary-disabled {
+    background-color: var(--color-primary-disabled);
+  }
+  .text-primary-foreground {
+    color: var(--color-primary-foreground);
+  }
+  .border-primary-disabled {
+    border-color: var(--color-primary-disabled);
+  }
   .text-placeholder {
     color: var(--color-placeholder);
   }
@@ -93,20 +109,8 @@
     border-color: var(--gray-a5);
   }
   
-  .text-white {
-    color: var(--color-white);
-  }
-  
-  .text-black {
-    color: var(--color-black);
-  }
-  
   .bg-white {
     background-color: var(--color-white);
-  }
-  
-  .bg-black {
-    background-color: var(--color-black);
   }
   
   .shadow-input-inset {
@@ -125,20 +129,20 @@
     border-color: var(--color-secondary-disabled);
   }
   
-  .bg-table-header {
-    background-color: var(--color-table-header-bg);
-  }
-  
-  .text-table-header {
-    color: var(--color-table-header-text);
-  }
-  
   .text-table-body {
     color: var(--color-table-body-text);
   }
   
-  .border-table {
+  .border-table-border {
     border-color: var(--color-table-border);
+  }
+  
+  .bg-table-header-bg {
+    background-color: var(--color-table-header-bg);
+  }
+  
+  .text-table-header-text {
+    color: var(--color-table-header-text);
   }
   
   .bg-table-fill {

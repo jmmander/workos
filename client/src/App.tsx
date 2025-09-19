@@ -35,7 +35,7 @@ function App() {
   const handleDeleteUser = useCallback(async (userId: string) => {
     try {
       await deleteUser(userId)
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Error is handled by React Query automatically
       console.error('Failed to delete user:', e)
     }

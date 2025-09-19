@@ -3,6 +3,7 @@ import { useDebounced } from '@/hooks/useDebounced'
 import { API_URL } from '@/utils/constants'
 import type { User, PagedData } from '@/types'
 
+//Direct API calls used in React query hooks
 async function fetchUsers(page: number, query: string): Promise<PagedData<User>> {
   const url = new URL(`${API_URL}/users`)
   if (query) url.searchParams.set("search", query)
@@ -20,6 +21,7 @@ async function deleteUserApi(userId: string): Promise<void> {
   if (!res.ok) throw new Error(`Delete failed: ${res.status}`)
 }
 
+// React query hooks
 export function useUsersQuery(page: number, query: string) {
   const debouncedQuery = useDebounced(query, 300)
   const queryClient = useQueryClient()
@@ -31,9 +33,9 @@ export function useUsersQuery(page: number, query: string) {
 
   const deleteUserMutation = useMutation({
     mutationFn: deleteUserApi,
-    onSuccess: () => {
-      // Invalidate and refetch users data
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+    onSuccess: async () => {
+      // Invalidate and refetch users data, wait for it to complete
+      await queryClient.invalidateQueries({ queryKey: ['users'] })
     },
   })
 

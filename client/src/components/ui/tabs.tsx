@@ -42,7 +42,10 @@ function TabsTrigger({
         "data-[state=active]:text-tabs-active data-[state=active]:font-medium",
         "after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0 after:z-10",
         "data-[state=active]:after:bottom-[-1px] data-[state=active]:after:h-[2px] data-[state=active]:after:bg-primary",
-        "focus-visible:outline-none",
+        "hover:text-tabs-active",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+        "active:brightness-90",
+        "transition-all duration-150",
         className
       )}
       {...props}

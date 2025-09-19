@@ -5,18 +5,18 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap transition-all hover:brightness-95 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none border aria-invalid:ring-destructive/20 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap hover:brightness-95 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 border aria-invalid:ring-destructive/20 aria-invalid:border-destructive focus-ring transition-all duration-150",
   {
     variants: {
       variant: {
-        default: "bg-primary hover:bg-[var(--color-primary-hover)] text-primary-foreground border-default-button disabled:bg-[var(--color-primary-disabled)] disabled:text-primary-foreground disabled:border-[var(--color-primary-disabled)]",
+        default: "bg-primary hover:bg-primary-hover text-primary-foreground border-button-border disabled:bg-primary-disabled disabled:text-primary-foreground disabled:border-primary-disabled active:brightness-90",
         destructive:
-          "text-destructive-soft-foreground bg-destructive-soft border-destructive-soft-border disabled:opacity-50 disabled:pointer-events-none",
+          "text-destructive-foreground bg-destructive border-destructive-border disabled:opacity-50 disabled:pointer-events-none active:brightness-90",
         outline:
-        "bg-transparent text-secondary-foreground border-secondary-border hover:bg-secondary-disabled disabled:bg-secondary-disabled disabled:text-secondary-disabled-text disabled:border-secondary-disabled",
+        "bg-transparent text-secondary-foreground border-secondary-border hover:bg-secondary-disabled disabled:bg-secondary-disabled disabled:text-secondary-disabled-text disabled:border-secondary-disabled active:bg-gray-a3",
         ghost:
-          "bg-transparent border-transparent text-secondary-foreground hover:bg-ghost-hover hover:brightness-100 data-[state=open]:bg-ghost-hover",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-transparent border-transparent text-secondary-foreground hover:bg-ghost-hover hover:brightness-100 data-[state=open]:bg-ghost-hover active:bg-gray-a3",
+        link: "text-primary underline-offset-4 hover:underline active:brightness-90",
       },
       size: {
         compact: "h-6 px-2 rounded-[3px] text-xs leading-4 font-medium text-center",

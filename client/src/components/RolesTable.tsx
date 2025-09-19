@@ -78,7 +78,7 @@ export function RolesTable({
       <div className={`rounded-lg border-table-inner ${(loading || error) ? 'h-[528px]' : ''}`}>
         <Table>
           <TableHeader>
-            <TableRow className="bg-table-header">
+            <TableRow className="bg-table-header-bg">
               <TableHead className="w-[240px]">Name</TableHead>
               <TableHead className="w-[350px]">Description</TableHead>
               <TableHead className="w-[200px]">Created</TableHead>
@@ -117,7 +117,7 @@ export function RolesTable({
                     <div className="flex items-center gap-2">
                       {role.name}
                       {role.isDefault && (
-                        <span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0 text-[10px] font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                        <span className="inline-flex items-center rounded-full bg--foreground px-1.5 py-0 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary">
                           Default
                         </span>
                       )}
