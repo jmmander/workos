@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UsersTable } from "@/components/UsersTable"
+import { RolesTable } from "@/components/RolesTable"
 import { useDebounced } from "@/hooks/useDebounced"
 import type { User, Role, PagedData } from "@/types"
 
@@ -15,6 +16,15 @@ function App() {
   const [rolesMap, setRolesMap] = useState<Record<string, Role>>({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Roles tab state
+  const [rolesPage, setRolesPage] = useState(1)
+  const [rolesQuery, setRolesQuery] = useState("")
+  const debouncedRolesQuery = useDebounced(rolesQuery, 300)
+  const [roles, setRoles] = useState<PagedData<Role>>({ data: [], next: null, prev: null, pages: 0 })
+  const [rolesLoading, setRolesLoading] = useState(false)
+  const [rolesError, setRolesError] = useState<string | null>(null)
+  const [rolesRefreshTrigger, setRolesRefreshTrigger] = useState(0)
 
   useEffect(() => {
     let cancelled = false
@@ -40,6 +50,35 @@ function App() {
       cancelled = true
     }
   }, [page, debouncedQuery])
+
+  useEffect(() => {
+    let cancelled = false
+    async function fetchRoles() {
+      setRolesLoading(true)
+      setRolesError(null)
+      try {
+        const url = new URL(`${API_URL}/roles`)
+        if (debouncedRolesQuery) url.searchParams.set("search", debouncedRolesQuery)
+        url.searchParams.set("page", String(rolesPage))
+        const res = await fetch(url)
+        if (!res.ok) throw new Error(`Roles ${res.status}`)
+        const json: PagedData<Role> = await res.json()
+        if (!cancelled) setRoles(json)
+      } catch (e: any) {
+        if (!cancelled) setRolesError(e.message || "Error")
+      } finally {
+        if (!cancelled) setRolesLoading(false)
+      }
+    }
+    fetchRoles()
+    return () => {
+      cancelled = true
+    }
+  }, [rolesPage, debouncedRolesQuery, rolesRefreshTrigger])
+
+  const refreshRoles = useCallback(() => {
+    setRolesRefreshTrigger(prev => prev + 1)
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -75,10 +114,17 @@ function App() {
       if (!res.ok) throw new Error(`Delete failed: ${res.status}`)
       
       // Remove user from local state
-      setUsers(prev => ({
-        ...prev,
-        data: prev.data.filter(user => user.id !== userId)
-      }))
+      const updatedUsers = {
+        ...users,
+        data: users.data.filter(user => user.id !== userId)
+      }
+      
+      // If we deleted the last item on this page and we're not on page 1, go back one page
+      if (updatedUsers.data.length === 0 && page > 1) {
+        setPage(page - 1)
+      } else {
+        setUsers(updatedUsers)
+      }
     } catch (e: any) {
       setError(e.message || "Failed to delete user")
     }
@@ -107,7 +153,16 @@ function App() {
         </TabsContent>
 
         <TabsContent value="roles">
-          <div className="text-sm text-muted-foreground">Roles management coming soon.</div>
+          <RolesTable
+            roles={roles}
+            loading={rolesLoading}
+            error={rolesError}
+            query={rolesQuery}
+            page={rolesPage}
+            onQueryChange={setRolesQuery}
+            onPageChange={setRolesPage}
+            onRoleUpdate={refreshRoles}
+          />
         </TabsContent>
       </Tabs>
     </div>
