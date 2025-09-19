@@ -7,6 +7,7 @@ import {
   Table,
   TableBody,
   TableCaption,
+  TableFooter,
   TableCell,
   TableHead,
   TableHeader,
@@ -44,12 +45,11 @@ export function UsersTable({
   loading,
   error,
   query,
-  page,
   onQueryChange,
   onPageChange
 }: UsersTableProps) {
   const rows = users.data
-  const totalPages = users.pages
+  
 
   return (
     <>
@@ -97,7 +97,7 @@ export function UsersTable({
                 </TableCell>
                 <TableCell className="w-[277px]">{rolesMap[u.roleId]?.name ?? ""}</TableCell>
                 <TableCell className="w-[236px]">{formatJoined(u.createdAt)}</TableCell>
-                <TableCell className="w-[36px] text-right">
+                <TableCell className="w-[36px] align-right pl-0">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" aria-label="Actions">
@@ -113,36 +113,36 @@ export function UsersTable({
               </TableRow>
             ))}
           </TableBody>
+          <TableFooter className="bg-table-fill">
+            <TableRow>
+              <TableCell colSpan={4} className="p-2">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationPrevious
+                      href="#"
+                      className={users.prev ? undefined : "pointer-events-none opacity-50"}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        if (users.prev) onPageChange(users.prev)
+                      }}
+                    />
+                    <PaginationNext
+                      href="#"
+                      className={users.next ? undefined : "pointer-events-none opacity-50"}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        if (users.next) onPageChange(users.next)
+                      }}
+                    />
+                  </PaginationContent>
+                </Pagination>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
           {rows.length === 0 && !loading && (
             <TableCaption>No users found</TableCaption>
           )}
         </Table>
-      </div>
-
-      <div className="mt-3">
-        <Pagination>
-          <PaginationContent>
-            <PaginationPrevious
-              href="#"
-              className={users.prev ? undefined : "pointer-events-none opacity-50"}
-              onClick={(e) => {
-                e.preventDefault()
-                if (users.prev) onPageChange(users.prev)
-              }}
-            />
-            <span className="px-2 text-sm text-muted-foreground">
-              Page {page} {totalPages ? `of ${totalPages}` : ""}
-            </span>
-            <PaginationNext
-              href="#"
-              className={users.next ? undefined : "pointer-events-none opacity-50"}
-              onClick={(e) => {
-                e.preventDefault()
-                if (users.next) onPageChange(users.next)
-              }}
-            />
-          </PaginationContent>
-        </Pagination>
       </div>
       {loading && (
         <div className="mt-2 text-sm text-muted-foreground">Loading…</div>

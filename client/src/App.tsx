@@ -1,4 +1,3 @@
-import './styles.css'
 import { useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UsersTable } from "@/components/UsersTable"
@@ -69,7 +68,7 @@ function App() {
   }, [])
 
   return (
-    <div className="mx-auto w-full max-w-5xl p-6">
+    <div className="mx-auto w-[850px] py-6">
       <Tabs defaultValue="users">
         <TabsList className="mb-6">
           <TabsTrigger value="users">Users</TabsTrigger>
