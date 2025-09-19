@@ -5,22 +5,22 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none border aria-invalid:ring-destructive/20 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap transition-all hover:brightness-95 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none border aria-invalid:ring-destructive/20 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground border-default-button",
+        default: "bg-primary hover:bg-[var(--color-primary-hover)] text-primary-foreground border-default-button disabled:bg-[var(--color-primary-disabled)] disabled:text-primary-foreground disabled:border-[var(--color-primary-disabled)]",
         destructive:
           "text-destructive-soft-foreground bg-destructive-soft border-destructive-soft-border",
         outline:
-        "bg-secondary text-secondary-foreground border-secondary-border shadow-xs hover:bg-secondary disabled:bg-secondary-disabled disabled:text-secondary-disabled-text",
+        "bg-transparent text-secondary-foreground border-secondary-border hover:bg-secondary-disabled disabled:bg-secondary-disabled disabled:text-secondary-disabled-text disabled:border-secondary-disabled",
         ghost:
-          "bg-transparent hover:bg-ghost-hover",
+          "bg-transparent hover:bg-ghost-hover hover:brightness-100",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "px-3 py-2 rounded-[4px]",
-        sm: "w-[110px] h-8 px-3 py-2 rounded font-medium text-sm leading-5 text-center",
+        compact: "h-6 px-2 rounded-[3px] text-xs leading-4 font-medium text-center",
+        default: "px-3 py-2 rounded font-medium text-sm leading-5 text-center",
         icon: "size-6 rounded-full p-0 text-icon-button border-0",
       },
     },

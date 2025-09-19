@@ -1,12 +1,13 @@
 import { MoreHorizontalIcon } from "lucide-react"
 import { SearchIcon } from "./SearchIcon"
 import { PlusIcon } from "./PlusIcon"
+import { ErrorState } from "./ErrorState"
+import { LoadingState } from "./LoadingState"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
-  TableCaption,
   TableFooter,
   TableCell,
   TableHead,
@@ -49,12 +50,11 @@ export function UsersTable({
   onPageChange
 }: UsersTableProps) {
   const rows = users.data
-  
 
   return (
     <>
       <div className="mb-6 flex items-center justify-between gap-2">
-        <div className="relative w-full max-w-lg">
+        <div className="relative w-full">
           <SearchIcon className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4" />
           <Input
             placeholder="Search by name..."
@@ -66,12 +66,12 @@ export function UsersTable({
             }}
           />
         </div>
-        <Button size="sm">
+        <Button size="default" className="w-[110px] h-8" disabled={loading}>
           <PlusIcon/> Add user
         </Button>
       </div>
 
-      <div className="rounded-lg border-table-inner">
+      <div className={`rounded-lg border-table-inner ${(loading || error) ? 'h-[528px]' : ''}`}>
         <Table>
           <TableHeader>
             <TableRow className="bg-table-header">
@@ -82,56 +82,83 @@ export function UsersTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rows.map((u) => (
-              <TableRow key={u.id}>
-                <TableCell className="w-[301px]">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={u.photo || `https://i.pravatar.cc/40?u=${u.id}`}
-                      alt="avatar"
-                      className="size-6 rounded-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                    <span>{u.first} {u.last}</span>
+            {error ? (
+              <TableRow>
+                <TableCell colSpan={4} className="p-0">
+                  <div className="h-[calc(528px-2.75rem-2.75rem)] flex items-center justify-center">
+                    <ErrorState message="Unable to load users. Please try again." />
                   </div>
                 </TableCell>
-                <TableCell className="w-[277px]">{rolesMap[u.roleId]?.name ?? ""}</TableCell>
-                <TableCell className="w-[236px]">{formatJoined(u.createdAt)}</TableCell>
-                <TableCell className="w-[36px] align-right pl-0">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" aria-label="Actions">
-                        <MoreHorizontalIcon />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+              </TableRow>
+            ) : loading ? (
+              <TableRow>
+                <TableCell colSpan={4} className="p-0">
+                  <div className="h-[calc(528px-2.75rem-2.75rem)] flex items-center justify-center">
+                    <LoadingState message="Loading users..." />
+                  </div>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="p-0">
+                  <div className="h-[calc(528px-2.75rem-2.75rem)] flex items-center justify-center">
+                    <div className="text-sm text-muted-foreground">No users found</div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              rows.map((u) => (
+                <TableRow key={u.id}>
+                  <TableCell className="w-[301px]">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={u.photo || `https://i.pravatar.cc/40?u=${u.id}`}
+                        alt="avatar"
+                        className="size-6 rounded-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span>{u.first} {u.last}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="w-[277px]">{rolesMap[u.roleId]?.name ?? ""}</TableCell>
+                  <TableCell className="w-[236px]">{formatJoined(u.createdAt)}</TableCell>
+                  <TableCell className="w-[36px] align-right pl-0">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" aria-label="Actions">
+                          <MoreHorizontalIcon />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
           <TableFooter className="bg-table-fill">
             <TableRow>
-              <TableCell colSpan={4} className="p-2">
+              <TableCell colSpan={4} className="p-2 w-full">
                 <Pagination>
                   <PaginationContent>
                     <PaginationPrevious
                       href="#"
-                      className={users.prev ? undefined : "pointer-events-none opacity-50"}
+                      disabled={!users.prev || !!error || loading}
                       onClick={(e) => {
                         e.preventDefault()
-                        if (users.prev) onPageChange(users.prev)
+                        if (users.prev && !error && !loading) onPageChange(users.prev)
                       }}
+
                     />
                     <PaginationNext
                       href="#"
-                      className={users.next ? undefined : "pointer-events-none opacity-50"}
+                      disabled={!users.next || !!error || loading}
                       onClick={(e) => {
                         e.preventDefault()
-                        if (users.next) onPageChange(users.next)
+                        if (users.next && !error && !loading) onPageChange(users.next)
                       }}
                     />
                   </PaginationContent>
@@ -139,17 +166,8 @@ export function UsersTable({
               </TableCell>
             </TableRow>
           </TableFooter>
-          {rows.length === 0 && !loading && (
-            <TableCaption>No users found</TableCaption>
-          )}
         </Table>
       </div>
-      {loading && (
-        <div className="mt-2 text-sm text-muted-foreground">Loading…</div>
-      )}
-      {error && (
-        <div className="mt-2 text-sm text-destructive">{error}</div>
-      )}
     </>
   )
 }

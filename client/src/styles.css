@@ -13,6 +13,8 @@
 
   /* Primary */
   --color-primary: rgb(101 101 236);
+  --color-primary-hover: rgb(90 90 212);
+  --color-primary-disabled: rgb(101 101 236 / 0.4);
   --color-primary-foreground: rgb(248 250 252);
 
   /* Secondary */
@@ -111,6 +113,14 @@
   
   .border-default-button {
     border-color: var(--color-button-border);
+  }
+  
+  .border-secondary-border {
+    border-color: var(--color-secondary-border);
+  }
+  
+  .border-secondary-disabled {
+    border-color: var(--color-secondary-disabled);
   }
   
   .bg-table-header {
