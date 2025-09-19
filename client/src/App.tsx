@@ -67,6 +67,23 @@ function App() {
     }
   }, [])
 
+  const deleteUser = async (userId: string) => {
+    try {
+      const res = await fetch(`${API_URL}/users/${userId}`, {
+        method: 'DELETE'
+      })
+      if (!res.ok) throw new Error(`Delete failed: ${res.status}`)
+      
+      // Remove user from local state
+      setUsers(prev => ({
+        ...prev,
+        data: prev.data.filter(user => user.id !== userId)
+      }))
+    } catch (e: any) {
+      setError(e.message || "Failed to delete user")
+    }
+  }
+
   return (
     <div className="mx-auto w-[850px] py-6">
       <Tabs defaultValue="users">
@@ -85,6 +102,7 @@ function App() {
             page={page}
             onQueryChange={setQuery}
             onPageChange={setPage}
+            onDeleteUser={deleteUser}
           />
         </TabsContent>
 

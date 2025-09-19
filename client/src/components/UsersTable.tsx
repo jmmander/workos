@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react"
 import { MoreHorizontalIcon } from "lucide-react"
 import { SearchIcon } from "./SearchIcon"
 import { PlusIcon } from "./PlusIcon"
@@ -26,6 +27,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import type { User, Role, PagedData } from "@/types"
 import { formatJoined } from "@/utils/formatters"
 
@@ -38,6 +47,7 @@ interface UsersTableProps {
   page: number
   onQueryChange: (query: string) => void
   onPageChange: (page: number) => void
+  onDeleteUser: (userId: string) => Promise<void>
 }
 
 export function UsersTable({
@@ -47,9 +57,30 @@ export function UsersTable({
   error,
   query,
   onQueryChange,
-  onPageChange
+  onPageChange,
+  onDeleteUser
 }: UsersTableProps) {
   const rows = users.data
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [userToDelete, setUserToDelete] = useState<User | null>(null)
+
+  const handleDeleteClick = useCallback((user: User) => {
+    setUserToDelete(user)
+    setDeleteDialogOpen(true)
+  }, [])
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (userToDelete) {
+      await onDeleteUser(userToDelete.id)
+      setDeleteDialogOpen(false)
+      setUserToDelete(null)
+    }
+  }, [onDeleteUser, userToDelete])
+
+  const handleDeleteCancel = useCallback(() => {
+    setDeleteDialogOpen(false)
+    setUserToDelete(null)
+  }, [])
 
   return (
     <>
@@ -131,7 +162,7 @@ export function UsersTable({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>Edit user</DropdownMenuItem>
-                        <DropdownMenuItem>Delete user</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDeleteClick(u)}>Delete user</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -168,6 +199,25 @@ export function UsersTable({
           </TableFooter>
         </Table>
       </div>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Delete user</DialogTitle>
+            <DialogDescription>
+              Are you sure? The user <span className="dialog-user-name">{userToDelete?.first} {userToDelete?.last}</span> will be permanently deleted.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleDeleteCancel}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteConfirm}>
+              Delete user
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

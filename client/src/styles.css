@@ -56,6 +56,8 @@
   --color-white: rgb(255 255 255);
   --color-black: rgb(0 0 0);
   --color-button-border: rgba(0, 17, 238, 0.06);
+  --gray-a3: rgba(0, 0, 59, 0.05);
+  --gray-12: rgba(43, 51, 59, 1);
   
   /* Table */
   --color-table-header-bg: #F9F9FB;
@@ -156,6 +158,41 @@
       0px -6.43px 24px 0px rgba(20, 20, 26, 0.02),
       0px 3.71px 13.2px 0px rgba(20, 20, 26, 0.04),
       0px 30px 56px 0px rgba(20, 20, 26, 0.12);
+  }
+  
+  .border-gray-a3 {
+    border-color: var(--gray-a3);
+  }
+  
+  .text-gray-12 {
+    color: var(--gray-12);
+  }
+  
+  .dialog-title {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: -0.01em;
+    color: var(--gray-12);
+  }
+  
+  .dialog-description {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0px;
+    color: var(--gray-12);
+  }
+  
+  .dialog-user-name {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0px;
+    color: var(--gray-12);
   }
 }
 
