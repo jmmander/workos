@@ -1,11 +1,17 @@
-import { useCallback, useEffect } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UsersTable } from "@/components/UsersTable"
-import { RolesTable } from "@/components/RolesTable"
+import { useCallback, useEffect, useState } from "react"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { DataTable } from "@/components/DataTable"
+import { SearchBar } from "@/components/SearchBar"
+import { PlusIcon } from "@/components/PlusIcon"
+import { Button } from "@/components/ui/button"
+import { EditRoleForm } from "@/components/EditRoleForm"
+import { DeleteUserDialog } from "@/components/DeleteUserDialog"
 import { useUrlState } from "@/hooks/useUrlState"
 import { useUsersQuery } from "@/hooks/useUsersQuery"
 import { useRolesQuery } from "@/hooks/useRolesQuery"
 import { useRolesMapQuery } from "@/hooks/useRolesMapQuery"
+import { useTabData } from "@/hooks/useTabData"
+import type { User, Role } from "@/types"
 
 function App() {
   const {
@@ -25,6 +31,12 @@ function App() {
   const { roles, loading: rolesLoading, error: rolesError } = useRolesQuery(rolesPage, rolesQuery)
   const rolesMap = useRolesMapQuery()
 
+  // Modal state
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [roleToEdit, setRoleToEdit] = useState<Role | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [userToDelete, setUserToDelete] = useState<User | null>(null)
+
   // Handle empty page navigation for users
   useEffect(() => {
     if (!usersLoading && users.data.length === 0 && page > 1) {
@@ -32,14 +44,83 @@ function App() {
     }
   }, [users.data.length, page, usersLoading, handlePageChange])
 
-  const handleDeleteUser = useCallback(async (userId: string) => {
+  // Modal handlers
+  const handleEditUser = useCallback((user: User) => {
+    console.log('Edit user:', user)
+    // TODO: Implement user editing
+  }, [])
+
+  const handleDeleteUser = useCallback((user: User) => {
+    setUserToDelete(user)
+    setDeleteDialogOpen(true)
+  }, [])
+
+  const handleEditRole = useCallback((role: Role) => {
+    setRoleToEdit(role)
+    setEditModalOpen(true)
+  }, [])
+
+  const handleDeleteRole = useCallback((role: Role) => {
+    console.log('Delete role:', role)
+    // TODO: Implement role deletion
+  }, [])
+
+  const handleCloseEditModal = useCallback(() => {
+    setEditModalOpen(false)
+    setRoleToEdit(null)
+  }, [])
+
+  const handleCloseDeleteDialog = useCallback(() => {
+    setDeleteDialogOpen(false)
+    setUserToDelete(null)
+  }, [])
+
+  const handleConfirmDeleteUser = useCallback(async (userId: string) => {
     try {
       await deleteUser(userId)
+      handleCloseDeleteDialog()
     } catch (e: unknown) {
-      // Error is handled by React Query automatically
       console.error('Failed to delete user:', e)
     }
-  }, [deleteUser])
+  }, [deleteUser, handleCloseDeleteDialog])
+
+  // Get current tab data using custom hook
+  const {
+    currentData,
+    currentLoading,
+    currentError,
+    currentPage,
+    currentQuery,
+    currentColumns,
+    currentActions,
+    currentHandlePageChange,
+    currentHandleQueryChange,
+    currentPlaceholder,
+    currentButtonText,
+    currentEmptyMessage,
+    currentLoadingMessage,
+    currentErrorMessage
+  } = useTabData({
+    activeTab,
+    users,
+    roles,
+    usersLoading,
+    rolesLoading,
+    usersError,
+    rolesError,
+    page,
+    rolesPage,
+    query,
+    rolesQuery,
+    handlePageChange,
+    handleRolesPageChange,
+    handleQueryChange,
+    handleRolesQueryChange,
+    handleEditUser,
+    handleDeleteUser,
+    handleEditRole,
+    handleDeleteRole
+  })
 
   return (
     <div className="mx-auto w-[850px] py-6">
@@ -49,31 +130,47 @@ function App() {
           <TabsTrigger value="roles">Roles</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="users">
-          <UsersTable 
-            users={users}
-            rolesMap={rolesMap}
-            loading={usersLoading}
-            error={usersError}
-            query={query}
-            page={page}
-            onQueryChange={handleQueryChange}
-            onPageChange={handlePageChange}
-            onDeleteUser={handleDeleteUser}
+        {/* Persistent UI elements */}
+        <div className="mb-6 flex items-center justify-between gap-2">
+          <SearchBar
+            query={currentQuery}
+            placeholder={currentPlaceholder}
+            loading={currentLoading}
+            onQueryChange={currentHandleQueryChange}
+            onPageChange={currentHandlePageChange}
           />
-        </TabsContent>
+          <Button size="default" className="w-[110px] h-8" disabled={currentLoading}>
+            <PlusIcon /> {currentButtonText}
+          </Button>
+        </div>
 
-        <TabsContent value="roles">
-          <RolesTable
-            roles={roles}
-            loading={rolesLoading}
-            error={rolesError}
-            query={rolesQuery}
-            page={rolesPage}
-            onQueryChange={handleRolesQueryChange}
-            onPageChange={handleRolesPageChange}
-          />
-        </TabsContent>
+        {/* Single DataTable that updates based on active tab */}
+        <DataTable
+          data={currentData}
+          columns={currentColumns}
+          actions={currentActions}
+          loading={currentLoading}
+          error={currentError}
+          page={currentPage}
+          onPageChange={currentHandlePageChange}
+          rolesMap={rolesMap}
+          emptyMessage={currentEmptyMessage}
+          loadingMessage={currentLoadingMessage}
+          errorMessage={currentErrorMessage}
+        />
+
+        <EditRoleForm
+          role={roleToEdit}
+          open={editModalOpen}
+          onOpenChange={handleCloseEditModal}
+        />
+
+        <DeleteUserDialog
+          user={userToDelete}
+          open={deleteDialogOpen}
+          onOpenChange={handleCloseDeleteDialog}
+          onDeleteUser={handleConfirmDeleteUser}
+        />
       </Tabs>
     </div>
   )
