@@ -15,7 +15,7 @@ const buttonVariants = cva(
         outline:
         "bg-transparent text-secondary-foreground border-secondary-border hover:bg-secondary-disabled disabled:bg-secondary-disabled disabled:text-secondary-disabled-text disabled:border-secondary-disabled",
         ghost:
-          "bg-transparent hover:bg-ghost-hover hover:brightness-100",
+          "bg-transparent hover:bg-ghost-hover hover:brightness-100 data-[state=open]:bg-ghost-hover",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

@@ -130,8 +130,8 @@ export function UsersTable({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+                        <DropdownMenuItem>Edit user</DropdownMenuItem>
+                        <DropdownMenuItem>Delete user</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -141,7 +141,7 @@ export function UsersTable({
           </TableBody>
           <TableFooter className="bg-table-fill">
             <TableRow>
-              <TableCell colSpan={4} className="p-2 w-full">
+              <TableCell colSpan={4} className="py-2.5 px-3 w-full">
                 <Pagination>
                   <PaginationContent>
                     <PaginationPrevious

@@ -148,6 +148,15 @@
     box-sizing: border-box;
     overflow: hidden;
   }
+  
+  .shadow-dropdown {
+    box-shadow: 
+      0px 1.85px 2.75px 0px rgba(20, 20, 26, 0.04),
+      0px 4.69px 6.95px 0px rgba(20, 20, 26, 0.05),
+      0px -6.43px 24px 0px rgba(20, 20, 26, 0.02),
+      0px 3.71px 13.2px 0px rgba(20, 20, 26, 0.04),
+      0px 30px 56px 0px rgba(20, 20, 26, 0.12);
+  }
 }
 
 @font-face {
