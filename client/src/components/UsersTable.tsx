@@ -4,6 +4,8 @@ import { PlusIcon } from "./PlusIcon"
 import { ErrorState } from "./ErrorState"
 import { LoadingState } from "./LoadingState"
 import { SearchBar } from "./SearchBar"
+import { DeleteUserDialog } from "./DeleteUserDialog"
+import { TablePagination } from "./TablePagination"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -15,27 +17,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 import type { User, Role, PagedData } from "@/types"
 import { formatJoined } from "@/utils/formatters"
 
@@ -65,57 +51,17 @@ export function UsersTable({
   const rows = users.data
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<User | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDeleteClick = useCallback((user: User) => {
     setUserToDelete(user)
     setDeleteDialogOpen(true)
   }, [])
 
-  const handleDeleteConfirm = useCallback(async () => {
-    if (userToDelete && !isDeleting) {
-      setIsDeleting(true)
-      try {
-        await onDeleteUser(userToDelete.id)
-        setDeleteDialogOpen(false)
-        setUserToDelete(null)
-      } finally {
-        setIsDeleting(false)
-      }
-    }
-  }, [onDeleteUser, userToDelete, isDeleting])
+  const handleCloseDialog = useCallback(() => {
+    setDeleteDialogOpen(false)
+    setUserToDelete(null)
+  }, [])
 
-  const handleDeleteCancel = useCallback(() => {
-    if (!isDeleting) {
-      setDeleteDialogOpen(false)
-      setUserToDelete(null)
-    }
-  }, [isDeleting])
-
-  const generatePageNumbers = useCallback(() => {
-    const totalPages = users.pages
-    if (totalPages <= 1) return []
-    
-    const pages: number[] = []
-    const maxVisiblePages = 5
-    
-    if (totalPages <= maxVisiblePages) {
-      // Show all pages if total is small
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
-      }
-    } else {
-      // Show current page with context
-      const startPage = Math.max(1, page - 2)
-      const endPage = Math.min(totalPages, page + 2)
-      
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i)
-      }
-    }
-    
-    return pages
-  }, [users.pages, page])
 
   return (
     <>
@@ -202,72 +148,25 @@ export function UsersTable({
           </TableBody>
           <TableFooter className="bg-table-fill">
             <TableRow>
-              <TableCell colSpan={4} className="py-2.5 px-3 w-full">
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        disabled={!users.prev || !!error}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          if (users.prev && !error) onPageChange(users.prev)
-                        }}
-                      />
-                    </PaginationItem>
-                    
-                    {generatePageNumbers().map((pageNum) => (
-                      <PaginationItem key={pageNum}>
-                        <PaginationLink
-                          href="#"
-                          isActive={pageNum === page}
-                          disabled={pageNum === page || !!error}
-                          onClick={(e) => {
-                            e.preventDefault()
-                            if (!error && pageNum !== page) onPageChange(pageNum)
-                          }}
-                        >
-                          {pageNum}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                    
-                    <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        disabled={!users.next || !!error}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          if (users.next && !error) onPageChange(users.next)
-                        }}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
+              <TableCell colSpan={4} className="py-1.5 px-3 w-full">
+                <TablePagination
+                  data={users}
+                  currentPage={page}
+                  error={error}
+                  onPageChange={onPageChange}
+                />
               </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
       </div>
 
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent showCloseButton={false}>
-          <DialogHeader>
-            <DialogTitle>Delete user</DialogTitle>
-            <DialogDescription>
-              Are you sure? The user <span className="dialog-user-name">{userToDelete?.first} {userToDelete?.last}</span> will be permanently deleted.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={handleDeleteCancel} disabled={isDeleting}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm} loading={isDeleting}>
-              {isDeleting ? "Deleting..." : "Delete user"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DeleteUserDialog
+        user={userToDelete}
+        open={deleteDialogOpen}
+        onOpenChange={handleCloseDialog}
+        onDeleteUser={onDeleteUser}
+      />
     </>
   )
 }

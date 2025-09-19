@@ -24,6 +24,7 @@ export function SearchBar({
         className="pl-7 pr-1"
         value={query}
         disabled={loading}
+        autoFocus
         onChange={(e) => {
           onPageChange(1)
           onQueryChange(e.target.value)
