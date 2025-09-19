@@ -11,11 +11,11 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary hover:bg-[var(--color-primary-hover)] text-primary-foreground border-default-button disabled:bg-[var(--color-primary-disabled)] disabled:text-primary-foreground disabled:border-[var(--color-primary-disabled)]",
         destructive:
-          "text-destructive-soft-foreground bg-destructive-soft border-destructive-soft-border",
+          "text-destructive-soft-foreground bg-destructive-soft border-destructive-soft-border disabled:opacity-50 disabled:pointer-events-none",
         outline:
         "bg-transparent text-secondary-foreground border-secondary-border hover:bg-secondary-disabled disabled:bg-secondary-disabled disabled:text-secondary-disabled-text disabled:border-secondary-disabled",
         ghost:
-          "bg-transparent hover:bg-ghost-hover hover:brightness-100 data-[state=open]:bg-ghost-hover",
+          "bg-transparent border-transparent text-secondary-foreground hover:bg-ghost-hover hover:brightness-100 data-[state=open]:bg-ghost-hover",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -36,19 +36,27 @@ function Button({
   variant,
   size,
   asChild = false,
+  loading = false,
+  children,
+  disabled,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
+    loading?: boolean
   }) {
   const Comp = asChild ? Slot : "button"
+  const isDisabled = disabled || loading
 
   return (
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      disabled={isDisabled}
       {...props}
-    />
+    >
+      {children}
+    </Comp>
   )
 }
 

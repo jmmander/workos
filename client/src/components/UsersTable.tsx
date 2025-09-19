@@ -18,6 +18,8 @@ import {
 import {
   Pagination,
   PaginationContent,
+  PaginationItem,
+  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
@@ -56,6 +58,7 @@ export function UsersTable({
   loading,
   error,
   query,
+  page,
   onQueryChange,
   onPageChange,
   onDeleteUser
@@ -63,6 +66,7 @@ export function UsersTable({
   const rows = users.data
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<User | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDeleteClick = useCallback((user: User) => {
     setUserToDelete(user)
@@ -70,17 +74,49 @@ export function UsersTable({
   }, [])
 
   const handleDeleteConfirm = useCallback(async () => {
-    if (userToDelete) {
-      await onDeleteUser(userToDelete.id)
+    if (userToDelete && !isDeleting) {
+      setIsDeleting(true)
+      try {
+        await onDeleteUser(userToDelete.id)
+        setDeleteDialogOpen(false)
+        setUserToDelete(null)
+      } finally {
+        setIsDeleting(false)
+      }
+    }
+  }, [onDeleteUser, userToDelete, isDeleting])
+
+  const handleDeleteCancel = useCallback(() => {
+    if (!isDeleting) {
       setDeleteDialogOpen(false)
       setUserToDelete(null)
     }
-  }, [onDeleteUser, userToDelete])
+  }, [isDeleting])
 
-  const handleDeleteCancel = useCallback(() => {
-    setDeleteDialogOpen(false)
-    setUserToDelete(null)
-  }, [])
+  const generatePageNumbers = useCallback(() => {
+    const totalPages = users.pages
+    if (totalPages <= 1) return []
+    
+    const pages: number[] = []
+    const maxVisiblePages = 5
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total is small
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Show current page with context
+      const startPage = Math.max(1, page - 2)
+      const endPage = Math.min(totalPages, page + 2)
+      
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i)
+      }
+    }
+    
+    return pages
+  }, [users.pages, page])
 
   return (
     <>
@@ -175,23 +211,43 @@ export function UsersTable({
               <TableCell colSpan={4} className="py-2.5 px-3 w-full">
                 <Pagination>
                   <PaginationContent>
-                    <PaginationPrevious
-                      href="#"
-                      disabled={!users.prev || !!error || loading}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        if (users.prev && !error && !loading) onPageChange(users.prev)
-                      }}
-
-                    />
-                    <PaginationNext
-                      href="#"
-                      disabled={!users.next || !!error || loading}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        if (users.next && !error && !loading) onPageChange(users.next)
-                      }}
-                    />
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        disabled={!users.prev || !!error}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          if (users.prev && !error) onPageChange(users.prev)
+                        }}
+                      />
+                    </PaginationItem>
+                    
+                    {generatePageNumbers().map((pageNum) => (
+                      <PaginationItem key={pageNum}>
+                        <PaginationLink
+                          href="#"
+                          isActive={pageNum === page}
+                          disabled={pageNum === page || !!error}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            if (!error && pageNum !== page) onPageChange(pageNum)
+                          }}
+                        >
+                          {pageNum}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        disabled={!users.next || !!error}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          if (users.next && !error) onPageChange(users.next)
+                        }}
+                      />
+                    </PaginationItem>
                   </PaginationContent>
                 </Pagination>
               </TableCell>
@@ -209,11 +265,11 @@ export function UsersTable({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={handleDeleteCancel}>
+            <Button variant="outline" onClick={handleDeleteCancel} disabled={isDeleting}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm}>
-              Delete user
+            <Button variant="destructive" onClick={handleDeleteConfirm} loading={isDeleting}>
+              {isDeleting ? "Deleting..." : "Delete user"}
             </Button>
           </DialogFooter>
         </DialogContent>

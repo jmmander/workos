@@ -1,6 +1,8 @@
 import * as React from "react"
 import {
   MoreHorizontalIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -56,8 +58,8 @@ function PaginationLink({
       data-active={isActive}
       className={cn(
         buttonVariants({
-          variant: "outline",
-          size: "compact",
+          variant: "ghost",
+          size: "icon",
         }),
         disabled && "bg-secondary-disabled text-secondary-disabled-text border-transparent pointer-events-none",
         className
@@ -69,31 +71,51 @@ function PaginationLink({
 
 function PaginationPrevious({
   className,
+  disabled,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
   return (
-    <PaginationLink
+    <a
       aria-label="Go to previous page"
-      className={cn(className)}
+      aria-disabled={disabled}
+      data-slot="pagination-previous"
+      className={cn(
+        buttonVariants({
+          variant: "ghost",
+          size: "icon",
+        }),
+        disabled && "text-secondary-disabled-text pointer-events-none",
+        className
+      )}
       {...props}
     >
-      <span className="hidden sm:block">Previous</span>
-    </PaginationLink>
+      <ChevronLeftIcon className="size-4" />
+    </a>
   )
 }
 
 function PaginationNext({
   className,
+  disabled,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
   return (
-    <PaginationLink
+    <a
       aria-label="Go to next page"
-      className={cn(className)}
+      aria-disabled={disabled}
+      data-slot="pagination-next"
+      className={cn(
+        buttonVariants({
+          variant: "ghost",
+          size: "icon",
+        }),
+        disabled && "text-secondary-disabled-text pointer-events-none",
+        className
+      )}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
-    </PaginationLink>
+      <ChevronRightIcon className="size-4" />
+    </a>
   )
 }
 
