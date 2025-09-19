@@ -71,20 +71,20 @@ export function UsersTable({
         </Button>
       </div>
 
-      <div className="rounded-lg border">
+      <div className="rounded-lg border-table-inner">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>User</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Joined</TableHead>
-              <TableHead className="w-0"></TableHead>
+            <TableRow className="bg-table-header">
+              <TableHead className="w-[301px]">User</TableHead>
+              <TableHead className="w-[277px]">Role</TableHead>
+              <TableHead className="w-[236px]">Joined</TableHead>
+              <TableHead className="w-[36px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {rows.map((u) => (
               <TableRow key={u.id}>
-                <TableCell>
+                <TableCell className="w-[301px]">
                   <div className="flex items-center gap-2">
                     <img
                       src={u.photo || `https://i.pravatar.cc/40?u=${u.id}`}
@@ -95,9 +95,9 @@ export function UsersTable({
                     <span>{u.first} {u.last}</span>
                   </div>
                 </TableCell>
-                <TableCell>{rolesMap[u.roleId]?.name ?? ""}</TableCell>
-                <TableCell>{formatJoined(u.createdAt)}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className="w-[277px]">{rolesMap[u.roleId]?.name ?? ""}</TableCell>
+                <TableCell className="w-[236px]">{formatJoined(u.createdAt)}</TableCell>
+                <TableCell className="w-[36px] text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" aria-label="Actions">

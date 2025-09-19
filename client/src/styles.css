@@ -54,6 +54,13 @@
   --color-white: rgb(255 255 255);
   --color-black: rgb(0 0 0);
   --color-button-border: rgba(0, 17, 238, 0.06);
+  
+  /* Table */
+  --color-table-header-bg: #F9F9FB;
+  --color-table-header-text: rgba(43, 51, 59, 1);
+  --color-table-border: rgba(221, 221, 227, 1);
+  --color-table-fill: rgba(255, 255, 255, 1);
+  --color-table-body-text: rgba(43, 51, 59, 1);
 }
 
 @layer base {
@@ -104,6 +111,32 @@
   
   .border-default-button {
     border-color: var(--color-button-border);
+  }
+  
+  .bg-table-header {
+    background-color: var(--color-table-header-bg);
+  }
+  
+  .text-table-header {
+    color: var(--color-table-header-text);
+  }
+  
+  .text-table-body {
+    color: var(--color-table-body-text);
+  }
+  
+  .border-table {
+    border-color: var(--color-table-border);
+  }
+  
+  .bg-table-fill {
+    background-color: var(--color-table-fill);
+  }
+  
+  .border-table-inner {
+    border: 1px solid var(--color-table-border);
+    box-sizing: border-box;
+    overflow: hidden;
   }
 }
 
