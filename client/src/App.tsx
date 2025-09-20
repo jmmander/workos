@@ -19,24 +19,21 @@ function App() {
     activeTab,
     page,
     query,
-    rolesPage,
-    rolesQuery,
     handleTabChange,
     handlePageChange,
     handleQueryChange,
-    handleRolesPageChange,
-    handleRolesQueryChange,
   } = useUrlState()
 
   const { users, loading: usersLoading, error: usersError } = useUsersQuery(
     page,
-    query
+    query,
+    activeTab === 'users'
   )
-  const {
-    roles,
-    loading: rolesLoading,
-    error: rolesError,
-  } = useRolesQuery(rolesPage, rolesQuery)
+  const { roles, loading: rolesLoading, error: rolesError } = useRolesQuery(
+    page,
+    query,
+    activeTab === 'roles'
+  )
   const rolesMap = useRolesMapQuery()
   const { deleteUser, isDeleting, deleteError, resetDeleteError } =
     useUserMutations()
@@ -119,13 +116,9 @@ function App() {
     usersError,
     rolesError,
     page,
-    rolesPage,
     query,
-    rolesQuery,
     handlePageChange,
-    handleRolesPageChange,
     handleQueryChange,
-    handleRolesQueryChange,
     handleEditUser,
     handleDeleteUser,
     handleEditRole,

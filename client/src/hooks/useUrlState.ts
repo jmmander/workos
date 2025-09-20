@@ -9,12 +9,6 @@ export function useUrlState() {
   const [activeTab, setActiveTab] = useState(urlParams.get('tab') || 'users')
   const [page, setPage] = useState(parseInt(urlParams.get('page') || '1'))
   const [query, setQuery] = useState(urlParams.get('search') || '')
-  const [rolesPage, setRolesPage] = useState(
-    parseInt(urlParams.get('rolesPage') || '1')
-  )
-  const [rolesQuery, setRolesQuery] = useState(
-    urlParams.get('rolesSearch') || ''
-  )
 
   // Merge provided params into the current URL's search params.
   const updateURL = useCallback((params: Record<string, string | number>) => {
@@ -32,24 +26,15 @@ export function useUrlState() {
   const handleTabChange = useCallback(
     (tab: string) => {
       setActiveTab(tab)
-      // Reset both tabs' filters on tab switch
+      // Reset shared filters on tab switch and keep URL minimal
       setQuery('')
       setPage(1)
-      setRolesQuery('')
-      setRolesPage(1)
-
-      if (tab === 'users') {
-        // Keep only users defaults in URL; remove any roles params
-        updateURL({ tab, page: 1, search: '', rolesPage: '', rolesSearch: '' })
-      } else {
-        // Keep only roles defaults in URL; remove users params
-        updateURL({ tab, rolesPage: 1, rolesSearch: '', page: '', search: '' })
-      }
+      updateURL({ tab, page: 1, search: '' })
     },
     [updateURL]
   )
 
-  // Update Users page and preserve Roles filters in URL
+  // Update page for active tab (shared state)
   const handlePageChange = useCallback(
     (newPage: number) => {
       setPage(newPage)
@@ -57,14 +42,12 @@ export function useUrlState() {
         tab: activeTab,
         page: newPage,
         search: query || '',
-        rolesPage: '',
-        rolesSearch: '',
       })
     },
-    [activeTab, query, rolesPage, rolesQuery, updateURL]
+    [activeTab, query, updateURL]
   )
 
-  // Update Users search and reset to page 1
+  // Update search for active tab (shared) and reset to page 1
   const handleQueryChange = useCallback(
     (newQuery: string) => {
       setQuery(newQuery)
@@ -73,54 +56,17 @@ export function useUrlState() {
         tab: activeTab,
         page: 1,
         search: newQuery || '',
-        rolesPage: '',
-        rolesSearch: '',
       })
     },
-    [activeTab, rolesPage, rolesQuery, updateURL]
-  )
-
-  // Update Roles page and preserve Users filters in URL
-  const handleRolesPageChange = useCallback(
-    (newPage: number) => {
-      setRolesPage(newPage)
-      updateURL({
-        tab: activeTab,
-        rolesPage: newPage,
-        rolesSearch: rolesQuery || '',
-        page: '',
-        search: '',
-      })
-    },
-    [activeTab, page, query, rolesQuery, updateURL]
-  )
-
-  // Update Roles search and reset to page 1
-  const handleRolesQueryChange = useCallback(
-    (newQuery: string) => {
-      setRolesQuery(newQuery)
-      setRolesPage(1)
-      updateURL({
-        tab: activeTab,
-        rolesPage: 1,
-        rolesSearch: newQuery || '',
-        page: '',
-        search: '',
-      })
-    },
-    [activeTab, page, query, updateURL]
+    [activeTab, updateURL]
   )
 
   return {
     activeTab,
     page,
     query,
-    rolesPage,
-    rolesQuery,
     handleTabChange,
     handlePageChange,
     handleQueryChange,
-    handleRolesPageChange,
-    handleRolesQueryChange,
   }
 }

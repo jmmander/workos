@@ -18,12 +18,13 @@ async function fetchUsers(
 }
 
 // Users list query with debounced search and page parameters.
-export function useUsersQuery(page: number, query: string) {
+export function useUsersQuery(page: number, query: string, enabled = true) {
   const debouncedQuery = useDebounced(query, 300)
 
   const usersQuery = useQuery({
     queryKey: ['users', 'paginated', page, debouncedQuery],
     queryFn: () => fetchUsers(page, debouncedQuery),
+    enabled,
   })
 
   return {

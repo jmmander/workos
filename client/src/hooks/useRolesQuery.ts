@@ -16,12 +16,13 @@ async function fetchRoles(
   return res.json()
 }
 
-export function useRolesQuery(page: number, query: string) {
+export function useRolesQuery(page: number, query: string, enabled = true) {
   const debouncedQuery = useDebounced(query, 300)
 
   const rolesQuery = useQuery({
     queryKey: ['roles', 'paginated', page, debouncedQuery],
     queryFn: () => fetchRoles(page, debouncedQuery),
+    enabled,
   })
 
   return {

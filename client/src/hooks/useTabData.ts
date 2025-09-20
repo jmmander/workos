@@ -12,13 +12,9 @@ interface UseTabDataProps {
   usersError: string | null
   rolesError: string | null
   page: number
-  rolesPage: number
   query: string
-  rolesQuery: string
   handlePageChange: (page: number) => void
-  handleRolesPageChange: (page: number) => void
   handleQueryChange: (query: string) => void
-  handleRolesQueryChange: (query: string) => void
   handleEditUser: (user: User) => void
   handleDeleteUser: (user: User) => void
   handleEditRole: (role: Role) => void
@@ -35,13 +31,9 @@ export function useTabData({
   usersError,
   rolesError,
   page,
-  rolesPage,
   query,
-  rolesQuery,
   handlePageChange,
-  handleRolesPageChange,
   handleQueryChange,
-  handleRolesQueryChange,
   handleEditUser,
   handleDeleteUser,
   handleEditRole,
@@ -62,16 +54,12 @@ export function useTabData({
       currentData: isUsers ? users : roles,
       currentLoading: isUsers ? usersLoading : rolesLoading,
       currentError: isUsers ? usersError : rolesError,
-      currentPage: isUsers ? page : rolesPage,
-      currentQuery: isUsers ? query : rolesQuery,
+      currentPage: page,
+      currentQuery: query,
       currentColumns: isUsers ? usersColumns : rolesColumns,
       currentActions: isUsers ? usersActions : rolesActions,
-      currentHandlePageChange: isUsers
-        ? handlePageChange
-        : handleRolesPageChange,
-      currentHandleQueryChange: isUsers
-        ? handleQueryChange
-        : handleRolesQueryChange,
+      currentHandlePageChange: handlePageChange,
+      currentHandleQueryChange: handleQueryChange,
       currentPlaceholder: isUsers ? 'Search by name...' : 'Search roles...',
       currentButtonText: isUsers ? 'Add user' : 'Add role',
       currentEmptyMessage: isUsers ? 'No users found' : 'No roles found',
@@ -89,15 +77,11 @@ export function useTabData({
       usersError,
       rolesError,
       page,
-      rolesPage,
       query,
-      rolesQuery,
       usersActions,
       rolesActions,
       handlePageChange,
-      handleRolesPageChange,
       handleQueryChange,
-      handleRolesQueryChange,
     ]
   )
 }
