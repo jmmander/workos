@@ -14,7 +14,7 @@ async function updateRole(roleId: string, data: UpdateRoleData): Promise<Role> {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   })
 
   if (!response.ok) {
@@ -29,7 +29,7 @@ export function useRoleMutations() {
   const queryClient = useQueryClient()
 
   const updateRoleMutation = useMutation({
-    mutationFn: ({ roleId, data }: { roleId: string; data: UpdateRoleData }) => 
+    mutationFn: ({ roleId, data }: { roleId: string; data: UpdateRoleData }) =>
       updateRole(roleId, data),
     onSuccess: async () => {
       // Invalidate both paginated roles and the roles map, wait for completion

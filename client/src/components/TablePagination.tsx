@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback } from 'react'
 import {
   Pagination,
   PaginationContent,
@@ -6,24 +6,29 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import type { PagedData } from "@/types"
+} from '@/components/ui/pagination'
+import type { PagedData, User, Role } from '@/types'
 
 interface TablePaginationProps {
-  data: PagedData<any>
+  data: PagedData<User | Role>
   currentPage: number
   error: string | null
   onPageChange: (page: number) => void
 }
 
-export function TablePagination({ data, currentPage, error, onPageChange }: TablePaginationProps) {
+export function TablePagination({
+  data,
+  currentPage,
+  error,
+  onPageChange,
+}: TablePaginationProps) {
   const generatePageNumbers = useCallback(() => {
     const totalPages = data.pages
     if (totalPages <= 1) return []
-    
+
     const pages: number[] = []
     const maxVisiblePages = 5
-    
+
     if (totalPages <= maxVisiblePages) {
       // Show all pages if total is small
       for (let i = 1; i <= totalPages; i++) {
@@ -33,12 +38,12 @@ export function TablePagination({ data, currentPage, error, onPageChange }: Tabl
       // Show current page with context
       const startPage = Math.max(1, currentPage - 2)
       const endPage = Math.min(totalPages, currentPage + 2)
-      
+
       for (let i = startPage; i <= endPage; i++) {
         pages.push(i)
       }
     }
-    
+
     return pages
   }, [data.pages, currentPage])
 
@@ -55,7 +60,7 @@ export function TablePagination({ data, currentPage, error, onPageChange }: Tabl
             }}
           />
         </PaginationItem>
-        
+
         {generatePageNumbers().map((pageNum) => (
           <PaginationItem key={pageNum}>
             <PaginationLink
@@ -71,7 +76,7 @@ export function TablePagination({ data, currentPage, error, onPageChange }: Tabl
             </PaginationLink>
           </PaginationItem>
         ))}
-        
+
         <PaginationItem>
           <PaginationNext
             href="#"

@@ -1,9 +1,12 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @theme inline {
   /* Fonts */
-  --font-sans: "Untitled Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    'Untitled Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   /* Base */
   --color-background: rgb(255 255 255);
   --color-foreground: rgb(12 12 25);
@@ -48,16 +51,16 @@
   --color-ghost-hover: rgb(0 0 59 / 0.05);
   --color-icon-button: rgb(0 7 19 / 0.62);
   --color-placeholder: rgb(0 4 29 / 0.46);
-  --gray-a5: #0000301B;
+  --gray-a5: #0000301b;
   --color-white: rgb(255 255 255);
   --color-black: rgb(0 0 0);
   --color-button-border: rgba(0, 17, 238, 0.06);
   --gray-a3: rgba(0, 0, 59, 0.05);
   --gray-a4: rgba(0, 0, 59, 0.1);
   --gray-12: rgba(43, 51, 59, 1);
-  
+
   /* Table */
-  --color-table-header-bg: #F9F9FB;
+  --color-table-header-bg: #f9f9fb;
   --color-table-header-text: rgba(43, 51, 59, 1);
   --color-table-border: rgba(221, 221, 227, 1);
   --color-table-fill: rgba(255, 255, 255, 1);
@@ -73,7 +76,9 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
   }
 }
 
@@ -100,78 +105,80 @@
   .text-placeholder {
     color: var(--color-placeholder);
   }
-  
+
   .text-icon-button {
     color: var(--color-icon-button);
   }
-  
+
   .border-gray-a5 {
     border-color: var(--gray-a5);
   }
-  
+
   .bg-white {
     background-color: var(--color-white);
   }
-  
+
   .shadow-input-inset {
-    box-shadow: inset 0px 1.5px 2px 0px #05055806, inset 0px 1.5px 2px 0px #00000006;
+    box-shadow:
+      inset 0px 1.5px 2px 0px #05055806,
+      inset 0px 1.5px 2px 0px #00000006;
   }
-  
+
   .border-default-button {
     border-color: var(--color-button-border);
   }
-  
+
   .border-secondary-border {
     border-color: var(--color-secondary-border);
   }
-  
+
   .border-secondary-disabled {
     border-color: var(--color-secondary-disabled);
   }
-  
+
   .text-table-body {
     color: var(--color-table-body-text);
   }
-  
+
   .border-table-border {
     border-color: var(--color-table-border);
   }
-  
+
   .bg-table-header-bg {
     background-color: var(--color-table-header-bg);
   }
-  
+
   .text-table-header-text {
     color: var(--color-table-header-text);
   }
-  
+
   .bg-table-fill {
     background-color: var(--color-table-fill);
   }
-  
+
   .border-table-inner {
     border: 1px solid var(--color-table-border);
     box-sizing: border-box;
     overflow: hidden;
   }
-  
+
   .shadow-dropdown {
-    box-shadow: 
+    box-shadow:
       0px 1.85px 2.75px 0px rgba(20, 20, 26, 0.04),
       0px 4.69px 6.95px 0px rgba(20, 20, 26, 0.05),
       0px -6.43px 24px 0px rgba(20, 20, 26, 0.02),
       0px 3.71px 13.2px 0px rgba(20, 20, 26, 0.04),
       0px 30px 56px 0px rgba(20, 20, 26, 0.12);
   }
-  
+
   .border-gray-a3 {
     border-color: var(--gray-a3);
   }
-  
+
   .text-gray-12 {
     color: var(--gray-12);
   }
-  
+
   .dialog-title {
     font-family: var(--font-sans);
     font-weight: 500;
@@ -180,7 +187,7 @@
     letter-spacing: -0.01em;
     color: var(--gray-12);
   }
-  
+
   .dialog-description {
     font-family: var(--font-sans);
     font-weight: 400;
@@ -189,7 +196,7 @@
     letter-spacing: 0px;
     color: var(--gray-12);
   }
-  
+
   .dialog-user-name {
     font-family: var(--font-sans);
     font-weight: 500;
@@ -201,73 +208,81 @@
 }
 
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-light.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-light.woff2')
+    format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-light-italic.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-light-italic.woff2')
+    format('woff2');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-regular.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-regular.woff2')
+    format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-regular-italic.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-regular-italic.woff2')
+    format('woff2');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-medium.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-medium.woff2')
+    format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-medium-italic.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-medium-italic.woff2')
+    format('woff2');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-bold.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-bold-italic.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-bold-italic.woff2')
+    format('woff2');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-black.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-black.woff2')
+    format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Untitled Sans";
-  src: url("/fonts/untitled-sans/test-untitled-sans-black-italic.woff2") format("woff2");
+  font-family: 'Untitled Sans';
+  src: url('/fonts/untitled-sans/test-untitled-sans-black-italic.woff2')
+    format('woff2');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
 }
-

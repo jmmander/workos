@@ -1,5 +1,5 @@
-import { SearchIcon } from "./SearchIcon"
-import { Input } from "@/components/ui/input"
+import { SearchIcon } from './SearchIcon'
+import { Input } from '@/components/ui/input'
 
 interface SearchBarProps {
   query: string
@@ -11,10 +11,10 @@ interface SearchBarProps {
 
 export function SearchBar({
   query,
-  placeholder = "Search...",
+  placeholder = 'Search...',
   loading = false,
   onQueryChange,
-  onPageChange
+  onPageChange,
 }: SearchBarProps) {
   return (
     <div className="relative w-full">

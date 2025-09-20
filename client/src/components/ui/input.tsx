@@ -1,16 +1,16 @@
-import * as React from "react"
+import * as React from 'react'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (
     <input
       type={type}
       data-slot="input"
       className={cn(
-        "file:text-foreground placeholder:text-placeholder flex h-8 w-full min-w-0 rounded border border-gray-a5 bg-transparent px-1 py-0 text-sm leading-5 font-normal tracking-normal transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 shadow-input-inset",
-        "aria-invalid:ring-destructive/20 aria-invalid:border-destructive",
-        "focus:outline-none focus-ring",
+        'file:text-foreground placeholder:text-placeholder flex h-8 w-full min-w-0 rounded border border-gray-a5 bg-transparent px-1 py-0 text-sm leading-5 font-normal tracking-normal transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 shadow-input-inset',
+        'aria-invalid:ring-destructive/20 aria-invalid:border-destructive',
+        'focus:outline-none focus-ring',
         className
       )}
       {...props}

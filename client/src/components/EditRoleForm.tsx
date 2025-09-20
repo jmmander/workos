@@ -1,15 +1,15 @@
-import { useState, useCallback, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState, useCallback, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { useRoleMutations } from "@/hooks/useRoleMutations"
-import type { Role } from "@/types"
+} from '@/components/ui/dialog'
+import { useRoleMutations } from '@/hooks/useRoleMutations'
+import type { Role } from '@/types'
 
 interface EditRoleFormProps {
   role: Role | null
@@ -18,8 +18,8 @@ interface EditRoleFormProps {
 }
 
 export function EditRoleForm({ role, open, onOpenChange }: EditRoleFormProps) {
-  const [editingName, setEditingName] = useState<string>("")
-  const [editingDescription, setEditingDescription] = useState<string>("")
+  const [editingName, setEditingName] = useState<string>('')
+  const [editingDescription, setEditingDescription] = useState<string>('')
   const { updateRole, isUpdating, updateError } = useRoleMutations()
 
   // Update form state when role changes
@@ -34,24 +34,31 @@ export function EditRoleForm({ role, open, onOpenChange }: EditRoleFormProps) {
     if (!role || !editingName.trim() || isUpdating) {
       return
     }
-    
+
     try {
       await updateRole({
         roleId: role.id,
         data: {
           name: editingName.trim(),
           description: editingDescription.trim(),
-          isDefault: role.isDefault // Keep existing isDefault value
-        }
+          isDefault: role.isDefault, // Keep existing isDefault value
+        },
       })
 
       // Success - close modal
       onOpenChange(false)
-    } catch (error: any) {
-      console.error("Failed to update role:", error)
+    } catch (error) {
+      console.error('Failed to update role:', error)
       // Error is already handled by React Query and available in updateError
     }
-  }, [role, editingName, editingDescription, isUpdating, updateRole, onOpenChange])
+  }, [
+    role,
+    editingName,
+    editingDescription,
+    isUpdating,
+    updateRole,
+    onOpenChange,
+  ])
 
   const handleCancel = useCallback(() => {
     onOpenChange(false)
@@ -65,7 +72,10 @@ export function EditRoleForm({ role, open, onOpenChange }: EditRoleFormProps) {
         </DialogHeader>
         <div className="space-y-4">
           <div>
-            <label htmlFor="role-name" className="block text-xs font-medium mb-1">
+            <label
+              htmlFor="role-name"
+              className="block text-xs font-medium mb-1"
+            >
               Name <span className="text-destructive">*</span>
             </label>
             <Input
@@ -77,7 +87,10 @@ export function EditRoleForm({ role, open, onOpenChange }: EditRoleFormProps) {
             />
           </div>
           <div>
-            <label htmlFor="role-description" className="block text-xs font-medium mb-1">
+            <label
+              htmlFor="role-description"
+              className="block text-xs font-medium mb-1"
+            >
               Description
             </label>
             <textarea
@@ -91,14 +104,24 @@ export function EditRoleForm({ role, open, onOpenChange }: EditRoleFormProps) {
           </div>
         </div>
         {updateError && (
-          <div className="text-sm text-destructive-foreground mt-2">Error updating role: {updateError}</div>
+          <div className="text-sm text-destructive-foreground mt-2">
+            Error updating role: {updateError}
+          </div>
         )}
         <DialogFooter>
-          <Button variant="outline" onClick={handleCancel} disabled={isUpdating}>
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+            disabled={isUpdating}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSaveRole} loading={isUpdating} disabled={!editingName.trim()}>
-            {isUpdating ? "Saving..." : "Save changes"}
+          <Button
+            onClick={handleSaveRole}
+            loading={isUpdating}
+            disabled={!editingName.trim()}
+          >
+            {isUpdating ? 'Saving...' : 'Save changes'}
           </Button>
         </DialogFooter>
       </DialogContent>

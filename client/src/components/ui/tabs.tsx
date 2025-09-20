@@ -1,7 +1,7 @@
-import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as React from 'react'
+import * as TabsPrimitive from '@radix-ui/react-tabs'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 function Tabs({
   className,
@@ -10,7 +10,7 @@ function Tabs({
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
-      className={cn("flex flex-col", className)}
+      className={cn('flex flex-col', className)}
       {...props}
     />
   )
@@ -23,7 +23,10 @@ function TabsList({
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
-      className={cn("inline-flex w-full items-end gap-2 border-b border-tabs-border p-0", className)}
+      className={cn(
+        'inline-flex w-full items-end gap-2 border-b border-tabs-border p-0',
+        className
+      )}
       {...props}
     />
   )
@@ -37,15 +40,15 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex items-center justify-center whitespace-nowrap px-4 pt-1 pb-2.5 text-[14px] leading-5",
-        "text-tabs-inactive font-normal",
-        "data-[state=active]:text-tabs-active data-[state=active]:font-medium",
-        "after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0 after:z-10",
-        "data-[state=active]:after:bottom-[-1px] data-[state=active]:after:h-[2px] data-[state=active]:after:bg-primary",
-        "hover:text-tabs-active",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        "active:brightness-90",
-        "transition-all duration-150",
+        'relative inline-flex items-center justify-center whitespace-nowrap px-4 pt-1 pb-2.5 text-[14px] leading-5',
+        'text-tabs-inactive font-normal',
+        'data-[state=active]:text-tabs-active data-[state=active]:font-medium',
+        'after:absolute after:left-0 after:right-0 after:bottom-0 after:h-0 after:z-10',
+        'data-[state=active]:after:bottom-[-1px] data-[state=active]:after:h-[2px] data-[state=active]:after:bg-primary',
+        'hover:text-tabs-active',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+        'active:brightness-90',
+        'transition-all duration-150',
         className
       )}
       {...props}
@@ -60,7 +63,7 @@ function TabsContent({
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"
-      className={cn("flex-1 outline-none", className)}
+      className={cn('flex-1 outline-none', className)}
       {...props}
     />
   )

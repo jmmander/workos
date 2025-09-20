@@ -1,17 +1,18 @@
-import { useCallback, useEffect, useState } from "react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { DataTable } from "@/components/DataTable"
-import { SearchBar } from "@/components/SearchBar"
-import { PlusIcon } from "@/components/PlusIcon"
-import { Button } from "@/components/ui/button"
-import { EditRoleForm } from "@/components/EditRoleForm"
-import { DeleteUserDialog } from "@/components/DeleteUserDialog"
-import { useUrlState } from "@/hooks/useUrlState"
-import { useUsersQuery } from "@/hooks/useUsersQuery"
-import { useRolesQuery } from "@/hooks/useRolesQuery"
-import { useRolesMapQuery } from "@/hooks/useRolesMapQuery"
-import { useTabData } from "@/hooks/useTabData"
-import type { User, Role } from "@/types"
+import { useCallback, useEffect, useState } from 'react'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { DataTable } from '@/components/DataTable'
+import { SearchBar } from '@/components/SearchBar'
+import { PlusIcon } from '@/components/PlusIcon'
+import { Button } from '@/components/ui/button'
+import { EditRoleForm } from '@/components/EditRoleForm'
+import { DeleteUserDialog } from '@/components/DeleteUserDialog'
+import { useUrlState } from '@/hooks/useUrlState'
+import { useUsersQuery } from '@/hooks/useUsersQuery'
+import { useRolesQuery } from '@/hooks/useRolesQuery'
+import { useRolesMapQuery } from '@/hooks/useRolesMapQuery'
+import { useTabData } from '@/hooks/useTabData'
+import { useUserMutations } from '@/hooks/useUserMutations'
+import type { User, Role } from '@/types'
 
 function App() {
   const {
@@ -24,12 +25,21 @@ function App() {
     handlePageChange,
     handleQueryChange,
     handleRolesPageChange,
-    handleRolesQueryChange
+    handleRolesQueryChange,
   } = useUrlState()
 
-  const { users, loading: usersLoading, error: usersError, deleteUser } = useUsersQuery(page, query)
-  const { roles, loading: rolesLoading, error: rolesError } = useRolesQuery(rolesPage, rolesQuery)
+  const { users, loading: usersLoading, error: usersError } = useUsersQuery(
+    page,
+    query
+  )
+  const {
+    roles,
+    loading: rolesLoading,
+    error: rolesError,
+  } = useRolesQuery(rolesPage, rolesQuery)
   const rolesMap = useRolesMapQuery()
+  const { deleteUser, isDeleting, deleteError, resetDeleteError } =
+    useUserMutations()
 
   // Modal state
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -75,14 +85,14 @@ function App() {
     setUserToDelete(null)
   }, [])
 
-  const handleConfirmDeleteUser = useCallback(async (userId: string) => {
-    try {
+  const handleConfirmDeleteUser = useCallback(
+    async (userId: string) => {
+      // Let the dialog own error display and closing on success.
       await deleteUser(userId)
       handleCloseDeleteDialog()
-    } catch (e: unknown) {
-      console.error('Failed to delete user:', e)
-    }
-  }, [deleteUser, handleCloseDeleteDialog])
+    },
+    [deleteUser, handleCloseDeleteDialog]
+  )
 
   // Get current tab data using custom hook
   const {
@@ -99,7 +109,7 @@ function App() {
     currentButtonText,
     currentEmptyMessage,
     currentLoadingMessage,
-    currentErrorMessage
+    currentErrorMessage,
   } = useTabData({
     activeTab,
     users,
@@ -119,11 +129,11 @@ function App() {
     handleEditUser,
     handleDeleteUser,
     handleEditRole,
-    handleDeleteRole
+    handleDeleteRole,
   })
 
   return (
-    <div className="mx-auto w-[850px] py-6">
+    <div className="mx-auto w-[898px] p-6 box-border">
       <Tabs value={activeTab} onValueChange={handleTabChange}>
         <TabsList className="mb-6">
           <TabsTrigger value="users">Users</TabsTrigger>
@@ -139,7 +149,11 @@ function App() {
             onQueryChange={currentHandleQueryChange}
             onPageChange={currentHandlePageChange}
           />
-          <Button size="default" className="w-[110px] h-8" disabled={currentLoading}>
+          <Button
+            size="default"
+            className="w-[110px] h-8"
+            disabled={currentLoading}
+          >
             <PlusIcon /> {currentButtonText}
           </Button>
         </div>
@@ -170,6 +184,9 @@ function App() {
           open={deleteDialogOpen}
           onOpenChange={handleCloseDeleteDialog}
           onDeleteUser={handleConfirmDeleteUser}
+          isDeleting={isDeleting}
+          error={deleteError}
+          onResetError={resetDeleteError}
         />
       </Tabs>
     </div>
