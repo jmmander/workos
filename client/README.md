@@ -34,7 +34,7 @@
 ### Known issues and follow‑ups (ie if I had more time)
 - Surface errors and confirmations via non‑blocking toasts.
 - Add photo fallback with initials (first letter of first name) and descriptive `alt` (e.g., "Profile photo of Jane Doe").
-- Add any missing aria labels.
+- Add any missing aria labels/roles.
 - Add table loading skeletons and optimistic UI updates for delete/rename.
 - Add unit tests for data hooks and components; Playwright for basic flows.
 - Use React Router or similar for better URL state management
