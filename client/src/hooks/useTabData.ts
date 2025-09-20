@@ -25,6 +25,7 @@ interface UseTabDataProps {
   handleDeleteRole: (role: Role) => void
 }
 
+// View-model that maps raw queries/mutations into per-tab UI state & handlers.
 export function useTabData({
   activeTab,
   users,

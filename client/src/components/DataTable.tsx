@@ -46,6 +46,7 @@ interface DataTableProps {
   errorMessage?: string
 }
 
+// Generic table for Users/Roles that renders columns, actions and footer pagination.
 export function DataTable({
   data,
   columns,
@@ -111,7 +112,7 @@ export function DataTable({
                     {column.render(item, rolesMap)}
                   </TableCell>
                 ))}
-                <TableCell className="w-[36px] align-right pl-0">
+                <TableCell className="w-[36px] pl-0">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" aria-label="Actions">

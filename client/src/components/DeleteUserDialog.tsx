@@ -60,7 +60,7 @@ export function DeleteUserDialog({
           </span>{' '}
           will be permanently deleted.
         </DialogDescription>
-        {!error && (
+        {error && (
           <div className="text-sm text-destructive-foreground mt-2 text-right">
             Error deleting user: {error}
           </div>

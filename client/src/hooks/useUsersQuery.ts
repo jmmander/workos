@@ -17,7 +17,7 @@ async function fetchUsers(
   return res.json()
 }
 
-// React query hooks
+// Users list query with debounced search and page parameters.
 export function useUsersQuery(page: number, query: string) {
   const debouncedQuery = useDebounced(query, 300)
 

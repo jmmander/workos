@@ -104,7 +104,7 @@ export function EditRoleForm({ role, open, onOpenChange }: EditRoleFormProps) {
           </div>
         </div>
         {updateError && (
-          <div className="text-sm text-destructive-foreground mt-2">
+          <div className="text-sm text-destructive-foreground mt-2 text-right">
             Error updating role: {updateError}
           </div>
         )}

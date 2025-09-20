@@ -140,7 +140,7 @@ function App() {
           <TabsTrigger value="roles">Roles</TabsTrigger>
         </TabsList>
 
-        {/* Persistent UI elements */}
+        {/* Search and add button */}
         <div className="mb-6 flex items-center justify-between gap-2">
           <SearchBar
             query={currentQuery}

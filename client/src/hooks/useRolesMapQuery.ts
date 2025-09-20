@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { API_URL } from '@/utils/constants'
 import type { Role, PagedData } from '@/types'
 
+// Fetches all roles across all pages into a single id->role map for fast lookup.
 async function fetchAllRoles(): Promise<Record<string, Role>> {
   const map: Record<string, Role> = {}
   let currentPage: number | null = 1

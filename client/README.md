@@ -1,69 +1,49 @@
-# React + TypeScript + Vite
+## WorkOS Frontend Take‑Home — Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Quick start
+- Prereq: Node.js 18+.
+- Install all deps from repo root:
+  - `npm run install:all`
+- Start both API and client from repo root:
+  - `npm run dev`
+  - Client: `http://localhost:5173`
+  - API: `http://localhost:3002`
+- Alternatively if you want to run the client and api separately:
+  - API: `cd server && npm install && npm run api`
+  - Client: `cd client && npm install && npm run dev`
 
-Currently, two official plugins are available:
+### What’s implemented
+- Users/Roles tabs with URL‑synced state (tab, page, search)
+- Users table with search filter (debounced) and actions menu
+- Delete user flow with confirmation dialog
+- Roles table with search filter (debounced) and actions menu
+- Rename role and update description via modal
+- Pagination with numbered pages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Notable decisions
+- Used Shadcn components (built on Radix primitives) for fast, accessible building blocks.
+- React Query for caching and simple invalidation on mutations.
+- Tailwind with a small design token layer to match the provided styles.
+- Lightweight URL sync for tab/page/search so refresh/back/forward behave predictably.
+- Uses a single data table for smooth transitions between users and roles
 
-## Expanding the ESLint configuration
+### Design deviations/decisions
+- Pagination: Added page numbers (max 5 visible) in addition to previous/next. This makes it faster to jump across pages and keeps you oriented on the current page.
+- Responsiveness: The table is intentionally non‑responsive (fixed width) to make review against the Figma easier.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Known issues and follow‑ups (ie if I had more time)
+- Surface errors and confirmations via non‑blocking toasts.
+- Add photo fallback with initials (first letter of first name) and descriptive `alt` (e.g., "Profile photo of Jane Doe").
+- Add any missing aria labels.
+- Add table loading skeletons and optimistic UI updates for delete/rename.
+- Add unit tests for data hooks and components; Playwright for basic flows.
+- Use React Router or similar for better URL state management
+- Implement all the functionality that exists in the UI but isn't actually hooked up
+- Add a responsive table view
+- Add full color palettes/theming 
+- Storybook for base components 
+- I downloaded the test font files for untitled sans - this provides a limited subset of characters to work with. There may be some visual disparities due to this. 
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+If you run into any issues starting the app, please reach out — happy to help.

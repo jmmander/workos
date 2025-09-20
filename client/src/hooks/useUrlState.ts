@@ -1,5 +1,8 @@
 import { useCallback, useState } from 'react'
 
+// Lightweight URL state sync for tab/page/search for both Users and Roles.
+// Keeps browser navigation (refresh, back/forward) predictable without a router.
+
 export function useUrlState() {
   const urlParams = new URLSearchParams(window.location.search)
 
@@ -13,6 +16,7 @@ export function useUrlState() {
     urlParams.get('rolesSearch') || ''
   )
 
+  // Merge provided params into the current URL's search params.
   const updateURL = useCallback((params: Record<string, string | number>) => {
     const url = new URL(window.location.href)
     Object.entries(params).forEach(([key, value]) => {
@@ -28,11 +32,24 @@ export function useUrlState() {
   const handleTabChange = useCallback(
     (tab: string) => {
       setActiveTab(tab)
-      updateURL({ tab })
+      // Reset both tabs' filters on tab switch
+      setQuery('')
+      setPage(1)
+      setRolesQuery('')
+      setRolesPage(1)
+
+      if (tab === 'users') {
+        // Keep only users defaults in URL; remove any roles params
+        updateURL({ tab, page: 1, search: '', rolesPage: '', rolesSearch: '' })
+      } else {
+        // Keep only roles defaults in URL; remove users params
+        updateURL({ tab, rolesPage: 1, rolesSearch: '', page: '', search: '' })
+      }
     },
     [updateURL]
   )
 
+  // Update Users page and preserve Roles filters in URL
   const handlePageChange = useCallback(
     (newPage: number) => {
       setPage(newPage)
@@ -40,13 +57,14 @@ export function useUrlState() {
         tab: activeTab,
         page: newPage,
         search: query || '',
-        rolesPage,
-        rolesSearch: rolesQuery || '',
+        rolesPage: '',
+        rolesSearch: '',
       })
     },
     [activeTab, query, rolesPage, rolesQuery, updateURL]
   )
 
+  // Update Users search and reset to page 1
   const handleQueryChange = useCallback(
     (newQuery: string) => {
       setQuery(newQuery)
@@ -55,37 +73,39 @@ export function useUrlState() {
         tab: activeTab,
         page: 1,
         search: newQuery || '',
-        rolesPage,
-        rolesSearch: rolesQuery || '',
+        rolesPage: '',
+        rolesSearch: '',
       })
     },
     [activeTab, rolesPage, rolesQuery, updateURL]
   )
 
+  // Update Roles page and preserve Users filters in URL
   const handleRolesPageChange = useCallback(
     (newPage: number) => {
       setRolesPage(newPage)
       updateURL({
         tab: activeTab,
-        page,
-        search: query || '',
         rolesPage: newPage,
         rolesSearch: rolesQuery || '',
+        page: '',
+        search: '',
       })
     },
     [activeTab, page, query, rolesQuery, updateURL]
   )
 
+  // Update Roles search and reset to page 1
   const handleRolesQueryChange = useCallback(
     (newQuery: string) => {
       setRolesQuery(newQuery)
       setRolesPage(1)
       updateURL({
         tab: activeTab,
-        page,
-        search: query || '',
         rolesPage: 1,
         rolesSearch: newQuery || '',
+        page: '',
+        search: '',
       })
     },
     [activeTab, page, query, updateURL]

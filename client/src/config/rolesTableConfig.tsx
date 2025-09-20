@@ -11,7 +11,7 @@ export const rolesColumns = [
         <div className="flex items-center gap-2">
           {role.name}
           {role.isDefault && (
-            <span className="inline-flex items-center rounded-full bg--foreground px-1.5 py-0 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary">
+            <span className="inline-flex items-center rounded-full bg-primary/10 px-1.5 py-0 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary">
               Default
             </span>
           )}

@@ -16,6 +16,7 @@ interface TablePaginationProps {
   onPageChange: (page: number) => void
 }
 
+// Renders previous/next and a compact set of numbered pages (max 5 visible).
 export function TablePagination({
   data,
   currentPage,
